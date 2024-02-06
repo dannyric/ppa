@@ -1,5 +1,4 @@
 import java.util.Random;
-// please work
 
 /**
  * Provide control over the randomization of the simulation. By using the
