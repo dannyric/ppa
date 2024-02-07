@@ -105,7 +105,7 @@ public abstract class Cell {
     
     
     // i ran it 4 times and it seems to be be working
-    protected int numberOfAliveNeighbours() {
+    protected int getNumberOfAliveNeighbours() {
         int count = 0;
         Field field = getField();
         for (Location l : field.adjacentLocations(location))
