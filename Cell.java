@@ -33,7 +33,7 @@ public abstract class Cell {
      * Make this cell act - that is: the cell decides it's status in the
      * next generation.
      */
-    abstract public void act();
+    public abstract void act();
 
     /**
      * Check whether the cell is alive or not.
@@ -49,7 +49,7 @@ public abstract class Cell {
     protected void setDead() {
         alive = false;
     }
-
+       
     /**
      * Indicate that the cell will be alive or dead in the next generation.
      */
@@ -101,5 +101,20 @@ public abstract class Cell {
      */
     protected Field getField() {
         return field;
+    }
+    
+    
+    // i ran it 4 times and it seems to be be working
+    protected int numberOfAliveNeighbours() {
+        int count = 0;
+        Field field = getField();
+        for (Location l : field.adjacentLocations(location))
+        {
+            if (field.getObjectAt(l).isAlive())
+                {
+                    count++;
+                }
+            }
+        return count;
     }
 }
