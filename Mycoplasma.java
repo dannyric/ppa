@@ -39,12 +39,12 @@ public class Mycoplasma extends Cell {
         */
         int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
         // Dies if fewer than two of its neighbours are alive
-        if (numberOfAliveNeighbours()<2 || numberOfAliveNeighbours()>3)
+        if (numberOfAliveNeighbours<2 || numberOfAliveNeighbours>3)
         {
             setNextState(false);
         }
         // Cell is alive if exactly 3 neighbours are alive
-        else if (numberOfAliveNeighbours()==3)
+        else if (numberOfAliveNeighbours==3)
         {
             setNextState(true);
         }
