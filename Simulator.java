@@ -16,9 +16,10 @@ public class Simulator {
 
     private static final double MYCOPLASMA_ALIVE_PROB = 0.25;
     private static final double RAINBOW_ALIVE_PROB = 0.15;
+    private static final double TIMECELL_ALIVE_PROB = 0.1;
     private List<Cell> cells;
     private Field field;
-    private int generation;
+    private static int generation;
 
     /**
      * Construct a simulation field with default size.
@@ -76,10 +77,13 @@ public class Simulator {
                     Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
                     cells.add(myco);
                 }
-                else if (rand.nextDouble()<= RAINBOW_ALIVE_PROB){
+                else if (rand.nextDouble() <= RAINBOW_ALIVE_PROB){
                     Rainbow rain = new Rainbow(field, location, Color.BLACK); 
                     cells.add(rain);
-
+                }
+                else if (rand.nextDouble() <= TIMECELL_ALIVE_PROB) {
+                    TimeCell tc = new TimeCell(field, location, Color.RED);
+                    cells.add(tc);
                 }
                 else{
                     Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
@@ -109,7 +113,7 @@ public class Simulator {
         return field;
     }
 
-    public int getGeneration() {
+    public static int getGeneration() {
         return generation;
     }
 }
