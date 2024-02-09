@@ -9,25 +9,24 @@ import java.util.List;
  */
 public class Rainbow extends Cell
 {
-    // instance variables - replace the example below with your own
-    //Constructor for rainbow
+    // Constructor for rainbow
     public Rainbow(Field field, Location location, Color col) {
         super(field, location, col);
     }
 
     /**
-    * This is how the Mycoplasma decides if it's alive or not
+    * This is how the rainbow cell decides if it's alive or not
     */
       public void act() {
         int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
         
         if(numberOfAliveNeighbours % 2==0){
             setColor(Color.GREEN); // sets the colour to green if the num. of neightbours is even 
-            if(numberOfAliveNeighbours > 3){ // deletes it the number of neigbours is greater then 3
+            if(numberOfAliveNeighbours > 3){ // deletes if the number of neigbours is greater than 3
                  setNextState(false);
             }
             else{
-                setNextState(true); //reinstates if the number is less then 4
+                setNextState(true); //reinstates if the number is less than 4
             }
         }
         else if(numberOfAliveNeighbours % 2==1){
@@ -43,4 +42,3 @@ public class Rainbow extends Cell
         }
     }
 }
-
