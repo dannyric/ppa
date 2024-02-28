@@ -5,8 +5,10 @@ import javafx.scene.Group;
 import javafx.scene.layout.BorderPane; 
 import javafx.scene.layout.HBox; 
 import javafx.scene.paint.Color; 
+import javafx.scene.control.Button; 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
 /**
  * A graphical view of the simulation grid. The view displays a rectangle for
@@ -44,17 +46,20 @@ public class SimulatorView extends Application {
     public void start(Stage stage) {
                 
         stats = new FieldStats();
-        fieldCanvas = new FieldCanvas(WIN_WIDTH - 50, WIN_HEIGHT - 50);
+        fieldCanvas = new FieldCanvas(WIN_WIDTH - 70, WIN_HEIGHT - 70); //chnage the field to fit the rest button 
         fieldCanvas.setScale(GRID_HEIGHT, GRID_WIDTH); 
         simulator = new Simulator();
+        Button resetB = new Button("RESET");
 
         Group root = new Group();
         
         genLabel = new Label(GENERATION_PREFIX);
         infoLabel = new Label("  ");
+        
         population = new Label(POPULATION_PREFIX);
 
         BorderPane bPane = new BorderPane(); 
+        BorderPane outsidePane = new BorderPane();
         HBox infoPane = new HBox();
         HBox popPane = new HBox();
         
@@ -66,13 +71,19 @@ public class SimulatorView extends Application {
         bPane.setTop(infoPane);
         bPane.setCenter(fieldCanvas);
         bPane.setBottom(population);
+        resetB.setOnAction(this::buttonClick);
         
-        root.getChildren().add(bPane);
+        outsidePane.setCenter(bPane); 
+        outsidePane.setBottom(resetB);
+               
+        root.getChildren().add(outsidePane);
         Scene scene = new Scene(root, WIN_WIDTH, WIN_HEIGHT); 
         
         stage.setScene(scene);          
         stage.setTitle("Life Simulation");
         updateCanvas(simulator.getGeneration(), simulator.getField());
+        
+        
         
         stage.show();     
     }
@@ -137,6 +148,9 @@ public class SimulatorView extends Application {
             }
             
         }).start();
+    }
+    public void buttonClick(ActionEvent event){
+        reset();
     }
 
     /**
