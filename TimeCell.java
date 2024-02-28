@@ -1,3 +1,4 @@
+
 import javafx.scene.paint.Color;
 import java.util.Random;
 
@@ -22,8 +23,11 @@ public class TimeCell extends Cell {
        Random rand = new Random();
        boolean changed = false;
        
+       if (getColor() == Color.BLACK){
+            isAlive(); 
+        }
        // Generation 0-10: alive if 2+ alive neighbours
-       if (generation <= 10 && numberOfAliveNeighbours > 1){
+       else if (generation <= 10 && numberOfAliveNeighbours > 1){
            setNextState(true);
            changed = true;
        }
@@ -48,5 +52,12 @@ public class TimeCell extends Cell {
        if (!changed) {
            setNextState(false);
        }
+       Random random = Randomizer.getRandom();
+
+        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease 
+            
+          makeDiseased();
+        }
     }
+
 }
