@@ -46,7 +46,7 @@ public class SimulatorView extends Application {
     public void start(Stage stage) {
                 
         stats = new FieldStats();
-        fieldCanvas = new FieldCanvas(WIN_WIDTH - 70, WIN_HEIGHT - 70); //chnage the field to fit the rest button 
+        fieldCanvas = new FieldCanvas(WIN_WIDTH - 50, WIN_HEIGHT - 50); //chnage the field to fit the rest button 
         fieldCanvas.setScale(GRID_HEIGHT, GRID_WIDTH); 
         simulator = new Simulator();
         Button resetB = new Button("RESET");
@@ -77,7 +77,7 @@ public class SimulatorView extends Application {
         outsidePane.setBottom(resetB);
                
         root.getChildren().add(outsidePane);
-        Scene scene = new Scene(root, WIN_WIDTH, WIN_HEIGHT); 
+        Scene scene = new Scene(root); 
         
         stage.setScene(scene);          
         stage.setTitle("Life Simulation");
