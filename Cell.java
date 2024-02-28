@@ -1,4 +1,6 @@
 import javafx.scene.paint.Color; 
+import java.util.Date; 
+import java.util.concurrent.TimeUnit;
 
 /**
  * A class representing the shared characteristics of all forms of life
@@ -14,6 +16,7 @@ public abstract class Cell {
     private Field field;
     private Location location;
     private Color color = Color.WHITE;
+    protected static final double DISEASED_PROB = 0.001;
 
     /**
      * Create a new cell at location in field.
@@ -33,7 +36,7 @@ public abstract class Cell {
      * Make this cell act - that is: the cell decides it's status in the
      * next generation.
      */
-    public abstract void act();
+    abstract public void act();
 
     /**
      * Check whether the cell is alive or not.
@@ -42,6 +45,10 @@ public abstract class Cell {
     protected boolean isAlive() {
         return alive;
     }
+    protected boolean nextAlive() {
+        return nextAlive;
+    }
+    
 
     /**
      * Indicate that the cell is no longer alive.
@@ -49,7 +56,7 @@ public abstract class Cell {
     protected void setDead() {
         alive = false;
     }
-       
+
     /**
      * Indicate that the cell will be alive or dead in the next generation.
      */
@@ -95,26 +102,39 @@ public abstract class Cell {
         field.place(this, location);
     }
 
-    /**
+    /** 
      * Return the cell's field.
      * @return The cell's field.
      */
     protected Field getField() {
         return field;
     }
-    
-    
-    // i ran it 4 times and it seems to be be working
+
     protected int getNumberOfAliveNeighbours() {
         int count = 0;
         Field field = getField();
         for (Location l : field.adjacentLocations(location))
         {
             if (field.getObjectAt(l).isAlive())
-                {
-                    count++;
-                }
+            {
+                count++;
             }
+        }  
         return count;
     }
+
+    public void makeDiseased(){ // changes the cell colour to black as well as the surrounding cells if they are alive and the same type of organism
+        setColor(Color.BLACK);
+        Field field2 = getField();
+        for (Location m : field2.adjacentLocations(location))
+        {
+            if (field.getObjectAt(m).isAlive())
+            {
+                setColor(Color.BLACK);
+                
+            }
+        } 
+
+    }
 }
+
