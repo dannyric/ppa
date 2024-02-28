@@ -1,5 +1,6 @@
 import javafx.scene.paint.Color; 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Simplest form of life.
@@ -23,31 +24,36 @@ public class Mycoplasma extends Cell {
         super(field, location, col);
     }
 
-    
-    // Ran a few times and seems to be working fine
     /**
-    * This is how the Mycoplasma decides if it's alive or not
-    */
+     * This is how the Mycoplasma decides if it's alive or not
+     */
     public void act() {
-        /*
+    
         List<Cell> neighbours = getField().getLivingNeighbours(getLocation());
         setNextState(false);
-        if (isAlive()) {
-            if (neighbours.size() > 1)
-                setNextState(true);
-            }
-        */
         int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
         // Dies if fewer than two of its neighbours are alive
-        if (numberOfAliveNeighbours<2 || numberOfAliveNeighbours>3)
-        {
-            setNextState(false);
+    
+        if (getColor() == Color.BLACK){
+            isAlive();
         }
-        // Cell is alive if exactly 3 neighbours are alive
+        else if (numberOfAliveNeighbours<2 || numberOfAliveNeighbours>3)
+            {
+                setNextState(false);
+            }
+            // Cell is alive if exactly 3 neighbours are alive
         else if (numberOfAliveNeighbours==3)
-        {
-            setNextState(true);
+            {
+                setNextState(true);
+            }
+            // Stays in current state if exactly 2 neighbours are alive (or any other situation than those mentioned above)
+        Random random = Randomizer.getRandom();
+
+        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease 
+            
+          makeDiseased();
         }
-        // Stays in current state if exactly 2 neighbours are alive (or any other situation than those mentioned above)
     }
+
 }
+
