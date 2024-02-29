@@ -18,9 +18,8 @@ public abstract class Cell {
     private Color color = Color.WHITE;
     protected boolean diseased = false;
     private boolean immune = false;
-    private int diseaseTimer = 3;
-    private int immuneTimer = 5;
-    protected static final double DISEASED_PROB = 0.0001;
+    private final int diseaseTimer = 3;
+    private final int immuneTimer = 5;
 
     /**
      * Create a new cell at location in field.
