@@ -32,28 +32,29 @@ public class Symbiosis extends Cell
     public void act()
     // The number of neighbours of type Symbiosis or Nondeterministic will affect the chances of survival of the cell
     {
-        switch (getNumberOfRelevantNeighbours()) {
-            case 0:
-                alive_prob = 0.25;
-                break;
-            case 1:
-                alive_prob = 0.5;
-                break;
-            case 2:
-                alive_prob = 0.75;
-                break;
-            case 3:
-                alive_prob = 0.9;
-                break;
-            default:
-                alive_prob = 0.4;
-        }
-
-        if (rand.nextDouble() < alive_prob) {
-            setNextState(true);
-        }
-        else {
-            setNextState(false);
+        if (diseaseChecks()) {
+            switch (getNumberOfRelevantNeighbours()) {
+                case 0:
+                    alive_prob = 0.25;
+                    break;
+                case 1:
+                    alive_prob = 0.5;
+                    break;
+                case 2:
+                    alive_prob = 0.75;
+                    break;
+                case 3:
+                    alive_prob = 0.9;
+                    break;
+                default:
+                    alive_prob = 0.4;
+            }
+            if (rand.nextDouble() < alive_prob) {
+                setNextState(true);
+            }
+            else {
+                setNextState(false);
+            }
         }
     }
 }
