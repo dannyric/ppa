@@ -2,23 +2,23 @@ import javafx.scene.paint.Color;
 import java.util.List;
 
 /**
- * Write a description of class Rainbow here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * The cell starts off as blue and changes between blue and green depending on whether the number of neighbours it has is even or odd
  */
 public class Rainbow extends Cell
 {
-    // Constructor for rainbow
+    /**
+     * Constructor for rainbow
+     */
     public Rainbow(Field field, Location location, Color col) {
         super(field, location, col);
     }
 
     /**
-    * This is how the rainbow cell decides if it's alive or not
-    */
+     * This is how the rainbow cell decides if it's alive or not
+     */
       public void act() {
-        if (diseaseChecks()) {
+        if (diseaseChecks()) {      // the cell acts normally if it is not affected by disease
+            resetColour();
             int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
             if(numberOfAliveNeighbours % 2==0){
                 setColor(Color.GREEN); // sets the colour to green if the num. of neightbours is even 
@@ -30,7 +30,7 @@ public class Rainbow extends Cell
                 }
             }
             else if(numberOfAliveNeighbours % 2==1){
-                 setColor(Color.BLUE); // sets the colour to green if the num. of neightbours is even 
+                setColor(Color.BLUE); // sets the colour to blue if the num. of neightbours is odd 
                 if(numberOfAliveNeighbours < 4){ // reinsates if the number of neigbours is less then 4
                      setNextState(true);
                 }
