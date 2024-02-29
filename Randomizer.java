@@ -1,5 +1,4 @@
 import java.util.Random;
-// please work
 
 /**
  * Provide control over the randomization of the simulation. By using the
@@ -15,7 +14,7 @@ public class Randomizer {
   
     private static final int SEED = 1111;
     private static final Random rand = new Random(SEED);
-    private static final boolean useShared = true;
+    private static final boolean useShared = false;
 
     /**
      * Provide a random generator.
