@@ -16,7 +16,11 @@ public abstract class Cell {
     private Field field;
     private Location location;
     private Color color = Color.WHITE;
-    protected static final double DISEASED_PROB = 0.001;
+    protected boolean diseased = false;
+    private boolean immune = false;
+    private int diseaseTimer = 3;
+    private int immuneTimer = 5;
+    protected static final double DISEASED_PROB = 0.0001;
 
     /**
      * Create a new cell at location in field.
@@ -45,10 +49,10 @@ public abstract class Cell {
     protected boolean isAlive() {
         return alive;
     }
+    
     protected boolean nextAlive() {
         return nextAlive;
     }
-    
 
     /**
      * Indicate that the cell is no longer alive.
@@ -122,8 +126,45 @@ public abstract class Cell {
         }  
         return count;
     }
+    
+    private boolean isDiseased() {
+        return diseased;
+    }
+    
+    private void setDiseased() {
+        diseased = true;
+    }
+    
+    private void setNotDiseased() {
+        diseased = false;
+    }
+    
+    private boolean isImmune() {
+        return immune;
+    }
+    
+    private void setImmune() {
+        immune = true;
+        immuneTimer = 5;
+    }
+    
+    private void setNotImmune() {
+        immune = false;
+    }
+    
+    private boolean hasDiseasedNeighbours() {
+        for (Location neighbour: field.adjacentLocations(location))
+        {
+            if (field.getObjectAt(neighbour).isDiseased()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public void makeDiseased(){ // changes the cell colour to black as well as the surrounding cells if they are alive and the same type of organism
+    protected void makeDiseased(){ // changes the cell colour to black as well as the surrounding cells if they are alive and the same type of organism
+        setDiseased();
+        diseaseTimer = 3;
         setColor(Color.BLACK);
         Field field2 = getField();
         for (Location m : field2.adjacentLocations(location))
@@ -131,10 +172,46 @@ public abstract class Cell {
             if (field.getObjectAt(m).isAlive())
             {
                 setColor(Color.BLACK);
-                
             }
-        } 
-
+        }
+    }
+    
+    private void actDiseased() {
+        diseaseTimer --;
+        if (getNumberOfAliveNeighbours() >= 2) {
+            setNextState(true);
+        }
+        else {
+            setNextState(false);
+        }
+    }
+    
+    protected boolean diseaseChecks() {
+        // Returns true if the cell is not diseased and can act normally, returns false otherwise
+        if (immuneTimer == 0) {
+            setNotImmune();
+        }
+        if (isDiseased()) {
+            if (diseaseTimer == 0) {
+                setImmune();
+                return true;
+            }
+            else {
+            actDiseased();
+            }
+        }
+        else if (isImmune()) {
+            immuneTimer --;
+            return true;
+        }
+        else {
+            if (hasDiseasedNeighbours() && isAlive()) {
+                makeDiseased();
+            }
+            else {
+                return true;
+            }
+        }
+        return false;
     }
 }
-
