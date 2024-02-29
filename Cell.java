@@ -16,16 +16,15 @@ public abstract class Cell {
     private Field field;
     private Location location;
     private Color color = Color.WHITE;
-    protected boolean diseased = false;
+    private boolean diseased = false;
     private boolean immune = false;
-    private int diseaseTimer = 3;
-    private int immuneTimer = 5;
+    private int diseaseTimer = 3;   // stores the number of remaining generations that the cell is diseased for (when diseased is true)
+    private int immuneTimer = 5;    // stores the number of remaining generations that the cell is immune for (when immune is true)
 
     /**
-     * Create a new cell at location in field.
-     *
-     * @param field The field currently occupied.
-     * @param location The location within the field.
+     * Create a new cell at location in field
+     * @param field The field currently occupied
+     * @param location The location within the field
      */
     public Cell(Field field, Location location, Color col) {
         alive = true;
@@ -113,6 +112,13 @@ public abstract class Cell {
         return field;
     }
 
+    protected void resetColour() {
+        setColor(color);
+    }
+    
+    /**
+     * Returns the number of alive neighbours that the cell has
+     */
     protected int getNumberOfAliveNeighbours() {
         int count = 0;
         Field field = getField();
@@ -126,31 +132,52 @@ public abstract class Cell {
         return count;
     }
     
-    private boolean isDiseased() {
+    /**
+     * Returns true if the cell is diseased
+     */
+    protected boolean isDiseased() {
         return diseased;
     }
     
+    /**
+     * Sets the value of diseased to true
+     */
     private void setDiseased() {
         diseased = true;
     }
     
+    /**
+     * Sets the value of diseased to false
+     */
     private void setNotDiseased() {
         diseased = false;
     }
     
-    private boolean isImmune() {
+    /**
+     * Returns true if the cell is immune
+     */
+    protected boolean isImmune() {
         return immune;
     }
     
-    private void setImmune() {
+    /**
+     * Sets the value of immune to true
+     */
+    protected void setImmune() {
         immune = true;
-        immuneTimer = 5;
+        immuneTimer = 7;
     }
     
-    private void setNotImmune() {
+    /**
+     * Sets the value of immune to false
+     */
+    protected void setNotImmune() {
         immune = false;
     }
     
+    /**
+     * Returns true if the cell has neighbours that are diseased
+     */
     private boolean hasDiseasedNeighbours() {
         for (Location neighbour: field.adjacentLocations(location))
         {
@@ -160,51 +187,58 @@ public abstract class Cell {
         }
         return false;
     }
-
-    protected void makeDiseased(){ // changes the cell colour to black as well as the surrounding cells if they are alive and the same type of organism
+    
+    /**
+     * Makes the cell diseased for 3 generations
+     */
+    protected void makeDiseased() {
         setDiseased();
         diseaseTimer = 3;
         setColor(Color.BLACK);
-        Field field2 = getField();
-        for (Location m : field2.adjacentLocations(location))
-        {
-            if (field.getObjectAt(m).isAlive())
-            {
-                setColor(Color.BLACK);
-            }
-        }
     }
     
+    /**
+     * Makes the cell act differently to normal when it is diseased
+     */
     private void actDiseased() {
         diseaseTimer --;
         if (getNumberOfAliveNeighbours() >= 2) {
+            // the cell lives if it has more than one alive neighbour
             setNextState(true);
         }
         else {
+            // the cell dies if it has none or one alive neighbour
             setNextState(false);
         }
     }
     
+    /**
+     * Returns true if the cell is not diseased and can act normally, returns false otherwise and acts diseased
+     */
     protected boolean diseaseChecks() {
-        // Returns true if the cell is not diseased and can act normally, returns false otherwise
         if (immuneTimer == 0) {
+            // sets the cell to not immune if the timer has run out
             setNotImmune();
         }
         if (isDiseased()) {
             if (diseaseTimer == 0) {
+                // makes the cell immune and sets it to not diseased when the diseased timer runs out
+                setNotDiseased();
                 setImmune();
                 return true;
             }
             else {
-            actDiseased();
+                actDiseased();
             }
         }
         else if (isImmune()) {
+            // decrements the immune timer and the cell acts normally
             immuneTimer --;
             return true;
         }
         else {
             if (hasDiseasedNeighbours() && isAlive()) {
+                // alive cells with diseased neighbours will become diseased
                 makeDiseased();
             }
             else {
