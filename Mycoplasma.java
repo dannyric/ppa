@@ -28,7 +28,6 @@ public class Mycoplasma extends Cell {
      * This is how the Mycoplasma decides if it's alive or not
      */
     public void act() {
-    
         List<Cell> neighbours = getField().getLivingNeighbours(getLocation());
         setNextState(false);
         int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
@@ -49,11 +48,8 @@ public class Mycoplasma extends Cell {
             // Stays in current state if exactly 2 neighbours are alive (or any other situation than those mentioned above)
         Random random = Randomizer.getRandom();
 
-        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease 
-            
+        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease
           makeDiseased();
         }
     }
-
 }
-
