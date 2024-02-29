@@ -1,7 +1,8 @@
 import javafx.scene.paint.Color;
 import java.util.Random;
 
-public abstract class Symbiosis extends Cell
+// public abstract class Symbiosis extends Cell
+public class Symbiosis extends Cell
 {
     Location loc;
     double alive_prob = 0.5;
@@ -13,12 +14,13 @@ public abstract class Symbiosis extends Cell
         loc = location;
     }
     
-    protected int getNumberOfSymbioticNeighbours() {
+    // Returns the number of neighbours of type Symbiosis or Nondeterministic
+    protected int getNumberOfRelevantNeighbours() {
         int count = 0;
         Field field = getField();
         for (Location l : field.adjacentLocations(loc))
         {
-            if (field.getObjectAt(l) instanceof Symbiosis)
+            if (field.getObjectAt(l) instanceof Symbiosis || field.getObjectAt(l) instanceof Nondeterministic)
                 {
                     count++;
                 }
@@ -26,9 +28,11 @@ public abstract class Symbiosis extends Cell
         return count;
     }
     
+    
     public void act()
+    // The number of neighbours of type Symbiosis or Nondeterministic will affect the chances of survival of the cell
     {
-        switch (getNumberOfSymbioticNeighbours()) {
+        switch (getNumberOfRelevantNeighbours()) {
             case 0:
                 alive_prob = 0.25;
                 break;
@@ -44,6 +48,7 @@ public abstract class Symbiosis extends Cell
             default:
                 alive_prob = 0.4;
         }
+        System.out.println(alive_prob);
         if (rand.nextDouble() < alive_prob) {
             setNextState(true);
         }
