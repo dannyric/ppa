@@ -20,38 +20,40 @@ public class Nondeterministic extends Cell
     
     public void act()
     {
-        Random rand = new Random();
-        double randomDouble = rand.nextDouble();
-        if (randomDouble < 0.2){
-            // The cell will be alive if it has more than two alive neighbours
-            if (getNumberOfAliveNeighbours() > 2){
-                setNextState(true);
+        if (diseaseChecks()) {
+            Random rand = new Random();
+            double randomDouble = rand.nextDouble();
+            if (randomDouble < 0.2){
+                // The cell will be alive if it has more than two alive neighbours
+                if (getNumberOfAliveNeighbours() > 2){
+                    setNextState(true);
+                }
+                else{
+                    setNextState(false);
+                }
+            }
+            else if (randomDouble < 0.5){
+                // 50/50 chance of the cell being alive or dead
+                if (rand.nextDouble() < 0.5){
+                    setNextState(true);
+                }
+                else{
+                    setNextState(false);
+                }
+            }
+            else if (randomDouble < 0.7){
+                // The cell will be alive if the generation number is even, and dead if it is odd
+                if (Simulator.getGeneration() % 2 == 0){
+                    setNextState(true);
+                }
+                else{
+                    setNextState(false);
+                }
             }
             else{
-                setNextState(false);
-            }
-        }
-        else if (randomDouble < 0.5){
-            // 50/50 chance of the cell being alive or dead
-            if (rand.nextDouble() < 0.5){
+                // The cell will live on
                 setNextState(true);
             }
-            else{
-                setNextState(false);
-            }
-        }
-        else if (randomDouble < 0.7){
-            // The cell will be alive if the generation number is even, and dead if it is odd
-            if (Simulator.getGeneration() % 2 == 0){
-                setNextState(true);
-            }
-            else{
-                setNextState(false);
-            }
-        }
-        else{
-            // The cell will live on
-            setNextState(true);
         }
     }
 }
