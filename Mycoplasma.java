@@ -13,15 +13,13 @@ import java.util.Random;
  */
 
 public class Mycoplasma extends Cell {
-
-    protected final double DISEASED_PROB = 0.0001;
+    
+    private final double DISEASED_PROB = 0.0005; // the probability that a Mycoplasma cell will become diseased
     
     /**
-     * Create a new Mycoplasma.
-     *
-     * @param field The field currently occupied.
-     * @param location The location within the field.
+     * Create a new Mycoplasma Cell
      */
+    
     public Mycoplasma(Field field, Location location, Color col) {
         super(field, location, col);
     }
@@ -30,28 +28,30 @@ public class Mycoplasma extends Cell {
      * This is how the Mycoplasma decides if it's alive or not
      */
     public void act() {
-        List<Cell> neighbours = getField().getLivingNeighbours(getLocation());
-        setNextState(false);
         int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
-        // Dies if fewer than two of its neighbours are alive
-    
-        if (getColor() == Color.BLACK){
-            isAlive();
-        }
-        else if (numberOfAliveNeighbours<2 || numberOfAliveNeighbours>3)
-            {
+        
+        if (isAlive()) {
+            if (numberOfAliveNeighbours<2 || numberOfAliveNeighbours>3) {
+                // Dies if fewer than two or more than 3 of its neighbours are alive
                 setNextState(false);
             }
-            // Cell is alive if exactly 3 neighbours are alive
-        else if (numberOfAliveNeighbours==3)
-            {
+            else {
+                // Lives on if 2 or 3 neighbours are alive and it was previously alive
                 setNextState(true);
             }
-            // Stays in current state if exactly 2 neighbours are alive (or any other situation than those mentioned above)
-        Random random = Randomizer.getRandom();
-
-        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease
-          makeDiseased();
+        }
+        else if (numberOfAliveNeighbours==3) {
+            // Cell is alive if exactly 3 neighbours are alive
+            setNextState(true);
+        }
+        else {
+            setNextState(false);
+        }
+        
+        Random rand = Randomizer.getRandom();
+        if(isAlive() && rand.nextDouble()<=DISEASED_PROB){
+            // If the cell is alive, it has a 0.05% chance of becoming diseased
+            makeDiseased();
         }
     }
 }
