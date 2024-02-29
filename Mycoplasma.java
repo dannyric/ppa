@@ -14,6 +14,8 @@ import java.util.Random;
 
 public class Mycoplasma extends Cell {
 
+    protected final double DISEASED_PROB = 0.0001;
+    
     /**
      * Create a new Mycoplasma.
      *
