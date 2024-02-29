@@ -48,7 +48,7 @@ public class Symbiosis extends Cell
             default:
                 alive_prob = 0.4;
         }
-        System.out.println(alive_prob);
+
         if (rand.nextDouble() < alive_prob) {
             setNextState(true);
         }
