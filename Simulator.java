@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-
 /**
  * A Life (Game of Life) simulator, first described by British mathematician
  * John Horton Conway in 1970.
@@ -16,8 +15,9 @@ import java.util.Random;
 public class Simulator {
 
     private static final double MYCOPLASMA_ALIVE_PROB = 0.25;
-    private static final double RAINBOW_ALIVE_PROB = 0.2;
-    private static final double TIMECELL_ALIVE_PROB = 0.2;
+    private static final double RAINBOW_ALIVE_PROB = 0.15;
+    private static final double TIMECELL_ALIVE_PROB = 0.15;
+    private static final double NONDETERMINISTIC_ALIVE_PROB = 0.15;
     private List<Cell> cells;
     private Field field;
     private static int generation;
@@ -45,7 +45,6 @@ public class Simulator {
      * Iterate over the whole field updating the state of each life form.
      */
     public void simOneGeneration() {
-        generation++;
         for (Iterator<Cell> it = cells.iterator(); it.hasNext(); ) {
             Cell cell = it.next();
             cell.act();
@@ -54,6 +53,7 @@ public class Simulator {
         for (Cell cell : cells) {
             cell.updateState();
         }
+        generation++;
     }
 
     /**
@@ -70,30 +70,31 @@ public class Simulator {
      */
     private void populate() {
         Random rand = Randomizer.getRandom();
-
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
                 Location location = new Location(row, col);
-
-                    if (rand.nextDouble() <= MYCOPLASMA_ALIVE_PROB) {
-                        Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
-                        cells.add(myco);
-                    }
-                    else if (rand.nextDouble() <= RAINBOW_ALIVE_PROB){
-                        Rainbow rain = new Rainbow(field, location, Color.PINK); 
-                        cells.add(rain);
-                    }
-                    else if (rand.nextDouble() <= TIMECELL_ALIVE_PROB) {
-                        TimeCell tc = new TimeCell(field, location, Color.RED);
-                        cells.add(tc);
-                    }
-                    else{
-                        Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
-
-                        myco.setDead();
-                        cells.add(myco);
-                    }
+                if (rand.nextDouble() <= MYCOPLASMA_ALIVE_PROB) {
+                    Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
+                    cells.add(myco);
+                }
+                else if (rand.nextDouble() <= RAINBOW_ALIVE_PROB){
+                    Rainbow rain = new Rainbow(field, location, Color.BLUE);
+                    cells.add(rain);
+                }
+                else if (rand.nextDouble() <= TIMECELL_ALIVE_PROB) {
+                    TimeCell tc = new TimeCell(field, location, Color.PINK);
+                    cells.add(tc);
+                }
+                else if (rand.nextDouble() <= NONDETERMINISTIC_ALIVE_PROB) {
+                    Nondeterministic nd = new Nondeterministic(field, location, Color.LIGHTGRAY);
+                    cells.add(nd);
+                }
+                else{
+                    Mycoplasma myco = new Mycoplasma(field, location, Color.ORANGE);
+                    myco.setDead();
+                    cells.add(myco);
+                }
             }
 
         }
