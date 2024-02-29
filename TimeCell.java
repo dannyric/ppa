@@ -1,4 +1,3 @@
-
 import javafx.scene.paint.Color;
 import java.util.Random;
 
@@ -17,47 +16,38 @@ public class TimeCell extends Cell {
     * This is how the time cell decides if it's alive or not
     */
     public void act() {
-       
-       int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
-       int generation = Simulator.getGeneration();
-       Random rand = new Random();
-       boolean changed = false;
-       
-       if (getColor() == Color.BLACK){
-            isAlive(); 
-        }
-       // Generation 0-10: alive if 2+ alive neighbours
-       else if (generation <= 10 && numberOfAliveNeighbours > 1){
-           setNextState(true);
-           changed = true;
-       }
-       // Generation 10-25: alive if 3+ alive neighbours
-       else if (generation <= 25 && numberOfAliveNeighbours > 2){
-           setNextState(true);
-           changed = true;
-       }
-       // Generation 25-50: alive if 4+ alive neighbours
-       else if (generation <= 50 && numberOfAliveNeighbours > 3){
-           setNextState(true);
-           changed = true;
-       }
-       // Generation 50+: alive if 5+ alive neighbours or 25% chance a dead cell will become alive again
-       else if (generation >= 50){
-           if (numberOfAliveNeighbours > 4 || rand.nextDouble() > 0.25){
+       if (diseaseChecks()) {
+           int numberOfAliveNeighbours = getNumberOfAliveNeighbours();
+           int generation = Simulator.getGeneration();
+           Random rand = new Random();
+           boolean changed = false;
+           
+           // Generation 0-10: alive if 2+ alive neighbours
+           if (generation <= 10 && numberOfAliveNeighbours > 1){
                setNextState(true);
                changed = true;
            }
+           // Generation 10-25: alive if 3+ alive neighbours
+           else if (generation <= 25 && numberOfAliveNeighbours > 2){
+               setNextState(true);
+               changed = true;
+           }
+           // Generation 25-50: alive if 4+ alive neighbours
+           else if (generation <= 50 && numberOfAliveNeighbours > 3){
+               setNextState(true);
+               changed = true;
+           }
+           // Generation 50+: alive if 5+ alive neighbours or 25% chance a dead cell will become alive again
+           else if (generation >= 50){
+               if (numberOfAliveNeighbours > 4 || rand.nextDouble() > 0.25){
+                   setNextState(true);
+                   changed = true;
+               }
+           }
+           // If none of the above conditions are met, the cell will be dead in the next generation
+           if (!changed) {
+               setNextState(false);
+           }
        }
-       // If none of the above conditions are met, the cell will be dead in the next generation
-       if (!changed) {
-           setNextState(false);
-       }
-       Random random = Randomizer.getRandom();
-
-        if((isAlive() == true) && random.nextDouble() <= DISEASED_PROB){ //checks if the cell is alive and if meets the chance the cell is effect by a disease 
-            
-          makeDiseased();
-        }
     }
-
 }
