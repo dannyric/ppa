@@ -111,9 +111,6 @@ public class Simulator {
             // wake up
         }
     }
-    public void isDis(Cell cell){
-        
-    }
 
     public Field getField() {
         return field;
